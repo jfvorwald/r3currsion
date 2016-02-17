@@ -1,0 +1,29 @@
+ul {
+	padding:0;
+	list-style: none;
+}
+
+.footer-social-icons {
+	width: 350px;
+	position: absolute;
+  	bottom: 0px;
+}
+
+.social-icon {
+	color: #fff;
+}
+
+ul.social-icons {	
+	margin-top: 10px;
+
+}
+
+.social-icons li {
+	vertical-align: top;
+	display: inline;
+}
+
+.social-icons a {
+	color: #fff; 
+	text-decoration: none;
+}
