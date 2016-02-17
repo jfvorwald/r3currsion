@@ -25,6 +25,25 @@ $(function() {
         }, 1500, 'easeInOutExpo');
         event.preventDefault();
     });
+
+    $('#front_play').on('click', function(event) {
+        if (typeof audio !== 'undefined') {
+            if (audio.paused) {
+                audio.play();
+                $(this).removeClass('fa-play-circle-o');
+                $(this).addClass('fa-pause-circle-o');
+            } else {
+                audio.pause();
+                $(this).removeClass('fa-pause-circle-o');
+                $(this).addClass('fa-play-circle-o');
+            }
+        } else {
+            audio = new Audio('aud/firestorm.mp3');
+            audio.play();
+            $(this).removeClass('fa-play-circle-o');
+            $(this).addClass('fa-pause-circle-o');
+        }
+    });
 });
 
 // Closes the Responsive Menu on Menu Item Click
