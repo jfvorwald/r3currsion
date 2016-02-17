@@ -27,3 +27,68 @@ ul.social-icons {
 	color: #fff; 
 	text-decoration: none;
 }
+
+.fa-facebook {
+	padding:10px 14px 7px 14px;
+	-o-transition:.5s;
+  	-ms-transition:.5s;
+  	-moz-transition:.5s;
+  	-webkit-transition:.5s;
+  	transition: .5s;
+}
+
+.fa-facebook:hover {
+	background-color: #3d5b99;
+}
+
+.fa-twitter {
+	padding:10px 10px 7px 10px;
+	-o-transition:.5s;
+  	-ms-transition:.5s;
+  	-moz-transition:.5s;
+  	-webkit-transition:.5s;
+  	transition: .5s;
+}
+
+.fa-twitter:hover {
+	background-color: #00aced;
+}
+
+.fa-soundcloud {
+	padding:10px 7px 7px 7px;
+	-o-transition:.5s;
+  	-ms-transition:.5s;
+  	-moz-transition:.5s;
+  	-webkit-transition:.5s;
+  	transition: .5s;
+}
+
+.fa-soundcloud:hover {
+	background-color: #eb8231;
+}
+
+.fa-spotify {
+	padding:10px 11px 7px 11px;
+	-o-transition:.5s;
+  	-ms-transition:.5s;
+  	-moz-transition:.5s;
+  	-webkit-transition:.5s;
+  	transition: .5s;
+}
+
+.fa-spotify:hover {
+	background-color: #6BBA63;
+}
+
+.fa-instagram {
+	padding:10px 11px 7px 11px;
+	-o-transition:.5s;
+  	-ms-transition:.5s;
+  	-moz-transition:.5s;
+  	-webkit-transition:.5s;
+  	transition: .5s;
+}
+
+.fa-instagram:hover {
+	background-color: #BA8763;
+}
