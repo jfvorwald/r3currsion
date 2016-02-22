@@ -1,3 +1,20 @@
+// Pageload
+$(function() {
+    $('.play-button').on('click', function(event) {
+        processAudio($(this));
+    });
+
+    $('.nav-item').on('click', function(event) {
+        clicked_nav_id = $(this).attr('id');
+        if (clicked_nav_id + '-section' !== $('.active-section').first().attr('id')) {
+            $('.active-section').fadeOut('400', function () {
+                $('#' + clicked_nav_id + '-section').fadeIn().addClass('active-section');
+            }).removeClass('active-section');
+        }
+    });
+});
+
+
 // jQuery to collapse the navbar on scroll
 function collapseNavbar() {
     if ($(".navbar").offset().top > 50) {
@@ -7,22 +24,11 @@ function collapseNavbar() {
     }
 }
 
-//$(window).scroll(collapseNavbar);
-//$(document).ready(collapseNavbar);
-
-// jQuery for page scrolling feature - requires jQuery Easing plugin
-$(function() {
-    $('a.page-scroll').bind('click', function(event) {
-        var $anchor = $(this);
-        $('html, body').stop().animate({
-            scrollTop: $($anchor.attr('href')).offset().top
-        }, 1500, 'easeInOutExpo');
-        event.preventDefault();
-    });
-
-    $('.play-button').on('click', function(event) {
-        processAudio($(this));
-    });
+// Closes the Responsive Menu on Menu Item Click
+$('.navbar-collapse ul li a').click(function() {
+  if ($(this).attr('class') != 'dropdown-toggle active' && $(this).attr('class') != 'dropdown-toggle') {
+    $('.navbar-toggle:visible').click();
+  }
 });
 
 function processAudio(element) {
@@ -105,13 +111,6 @@ function processAudio(element) {
         };
     }
 }
-
-// Closes the Responsive Menu on Menu Item Click
-$('.navbar-collapse ul li a').click(function() {
-  if ($(this).attr('class') != 'dropdown-toggle active' && $(this).attr('class') != 'dropdown-toggle') {
-    $('.navbar-toggle:visible').click();
-  }
-});
 
 // Soundcloud API
 function get(url, callback) {
