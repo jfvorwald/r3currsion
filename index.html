@@ -66,7 +66,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
-                        <i class="fa fa-play-circle-o text_effect" id="front_play"></i>
+                        <i class="fa fa-play-circle-o play-button text_effect" id="front_play"></i>
                         <h1 class="brand-heading">Init ();</h1>
                     </div>
                 </div>
@@ -84,6 +84,13 @@
         </ul>
     </div>
 
+    <div id="footer-player">
+        <div id="player">
+            <i class="fa fa-play play-button" id="player-play"></i>
+            <canvas id="player-visual"></canvas>
+        </div>
+    </div>
+
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
 
@@ -95,6 +102,8 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="js/grayscale.js"></script>
+
+    <script src="https://rawgit.com/jeromeetienne/webaudiox/master/build/webaudiox.js"></script>
 
 </body>
 
