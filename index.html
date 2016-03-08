@@ -9,13 +9,13 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>R3cursion</title>
+    <title>R3currsion</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="css/grayscale.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
     <link href="css/icons.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
@@ -23,6 +23,7 @@
     <!-- <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
     <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/trontastic/jquery-ui.css" type="text/css">
 
 </head>
 
@@ -36,7 +37,7 @@
                     <i class="fa fa-bars"></i>
                 </button>
                 <a class="navbar-brand page-scroll text_effect nav-item" id="intro">
-                    <i class="fa fa-play-circle text_effect_sup"></i>  r3cursion
+                    <i class="fa fa-play-circle text_effect_sup"></i>  r3currsion
                 </a>
             </div>
 
@@ -66,8 +67,10 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
-                        <i class="fa fa-play-circle-o play-button text_effect" id="front_play"></i>
-                        <h1 class="brand-heading">Init ();</h1>
+                        <i class="fa fa-play-circle-o play-button" id="front_play"></i>
+                        <div id="init">
+                            <span class="brand-heading" id="cover-title"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -121,6 +124,9 @@
         <div id="player">
             <i class="fa fa-play play-button" id="player-play"></i>
             <canvas id="player-visual"></canvas>
+            <div id="volume">
+                <div id="vol_control"></div>
+            </div>
         </div>
     </div>
 
@@ -136,7 +142,11 @@
     <!-- Custom Theme JavaScript -->
     <script src="js/grayscale.js"></script>
 
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
     <script src="https://rawgit.com/jeromeetienne/webaudiox/master/build/webaudiox.js"></script>
+    <script src="https://rawgit.com/mattboldt/typed.js/v1.1.1/dist/typed.min.js"></script>
 
 </body>
 

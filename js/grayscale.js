@@ -12,6 +12,22 @@ $(function() {
             }).removeClass('active-section');
         }
     });
+
+  $("#cover-title").typed({
+    strings: ["Init ();"],
+    typeSpeed: 200,
+    cursorChar: "█",
+    startDelay: 150,
+  });
+
+  $("#vol_control").slider({
+      value: 70,
+      orientation: "vertical",
+      range: "min",
+      animate: true,
+      slide: updateVolume,
+      change: updateVolume
+    });
 });
 
 
@@ -68,9 +84,10 @@ function processAudio(element) {
         // offset, since the gradient is calculated based on
         // the canvas, not the specific element we draw
         var gradient = ctx.createLinearGradient(0,0,0,300);
-        gradient.addColorStop(1,'#000000');
-        gradient.addColorStop(0.75,'#BFBFBF');
-        gradient.addColorStop(0.25,'#ffffff');
+        gradient.addColorStop(1,'#ffffff');
+        gradient.addColorStop(0.75,'#ffffff');
+        gradient.addColorStop(0.50,'#ffffff');
+        gradient.addColorStop(0.25,'#488A2D');
         gradient.addColorStop(0,'#ffffff');
 
         // setup a javascript node
@@ -112,6 +129,13 @@ function processAudio(element) {
     }
 }
 
+function updateVolume() {
+    if (typeof audio !== 'undefined') {
+        var volume_val = $("#vol_control").slider("value");
+        audio.volume = volume_val / 100;
+    }
+}
+
 // Soundcloud API
 function get(url, callback) {
     var request = new XMLHttpRequest();
@@ -138,4 +162,3 @@ function findTrack(audio) {
       }
     );
 };
-
