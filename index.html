@@ -1,30 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>R3CURRSION</title>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<!-- Bootstrap Core CSS -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <title>R3currsion</title>
+<!-- Custom CSS -->
+<link href="css/main.css" rel="stylesheet">
+<link href="css/icons.css" rel="stylesheet">
 
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+<!-- Custom Fonts -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<!-- <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
 
-    <!-- Custom CSS -->
-    <link href="css/main.css" rel="stylesheet">
-    <link href="css/icons.css" rel="stylesheet">
-
-    <!-- Custom Fonts -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <!-- <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
-    <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/trontastic/jquery-ui.css" type="text/css">
-
+<link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/trontastic/jquery-ui.css" type="text/css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 
 <!-- CSS containers -->
@@ -35,140 +33,177 @@
 #cr {
 	position: relative;
 }
-    
+
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-custom navbar-fixed-top top-nav-collapse" role="navigation">
+<!-- Navigation -->
+<nav class="navbar navbar-custom navbar-fixed-top top-nav-collapse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"> <i class="fa fa-bars"></i> </button>
+            <a class="navbar-brand page-scroll text_effect nav-item" id="intro"> <i class="fa fa-play-circle text_effect_sup"></i> r3currsion </a> </div>
+        
+        <!-- Collect the  nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+            <ul class="nav navbar-nav">
+                <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                <li class="hidden"> <a href="#page-top"></a> </li>
+                <li> <a class="text_effect nav-item" id="music">Music</a> </li>
+                <li> <a class="text_effect nav-item" id="contact">Contact</a> </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse --> 
+    </div>
+    <!-- /.container --> 
+</nav>
+
+<!-- Intro Header -->
+<section id="intro-section" class="intro active-section">
+    <div class="intro-body">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
-                    <i class="fa fa-bars"></i>
-                </button>
-                <a class="navbar-brand page-scroll text_effect nav-item" id="intro">
-                    <i class="fa fa-play-circle text_effect_sup"></i>  r3currsion
-                </a>
-            </div>
-
-            <!-- Collect the  nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
-                <ul class="nav navbar-nav">
-                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
-                    <li class="hidden">
-                        <a href="#page-top"></a>
-                    </li>
-                    <li>
-                        <a class="text_effect nav-item" id="music">Music</a>
-                    </li>
-                    <li>
-                        <a class="text_effect nav-item" id="contact">Contact</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container -->
-    </nav>
-
-    <!-- Intro Header -->
-    <section id="intro-section" class="intro active-section">
-        <div class="intro-body">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <i class="fa fa-play-circle-o play-button" id="front_play"></i>
-                        <div id="init">
-                            <span class="brand-heading" id="cover-title"></span>
-                        </div>
-                    </div>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2"> <i class="fa fa-play-circle-o play-button" id="front_play"></i>
+                    <div id="init"> <span class="brand-heading" id="cover-title"></span> </div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Music Section -->
-    <section id="music-section" class="container content-section text-center">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2">
-                <h2>This section is in development still... Updates coming soon!!</h2>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact-section" class="container content-section text-center">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2">
-                <h2>About Me</h2>
-                <p>Hello Friend, I am a 26 year-old unsigned producer. I currently work full-time as a software engineer, and produce in my free time with the aspiration to create stage worthy music and beyond.<br /><br />
-
-Growing up I always loved computers and had wanted to build them. Somewhere down the road (around age 14 or 15), I was gifted Fruity Loops and begun casually writing music and software for fun. I loved both hobbies, and ended up pursuing a degree in Computer engineering and Computer Science at the University of Massachusetts Amherst.<br /><br />
-
-While there I took graduate level computer science, machine learning, signal processing, and other related courses. One constant throughout all the mayhem of engineering were my close friends, and at the time, one such friend was producing music for a record label. This inspired me to continue with music production as a hobby, to start learning new tools, and to improve both myself and my production techniques.<br /><br /> 
-
-Occasionally I would visit his music studio and we would have collaborative “studio sessions” where we would try to produce together. These almost always ended in failure to complete a production but were an opportunity to learn numerous skill sets, including, but not limited to, the ability to D.J., construct legible productions, advanced sound design techniques, and much more.<br /><br /> 
-
-At one point during university I was enrolled in an Artificial Intelligence course, where I encountered a music video of a 3D hologram of 2-Pac on YouTube. It dawned on me that one day I could maybe automate a piece of software to play music on a stage like in that video. Delving further into this concept, I thought about creating AI to write music. I ended up calling this idea/application “r3currsion”.<br /><br />    
-
-After graduating, I started working full-time as a developer, and simultaneously burgeoned my passion for music. I know that I will never be able to give up writing software; I crave the logical problem solving intrinsic to the field. At the same time, I will never be able to relinquish my creativity and urge to produce unique works of art in my digital studio. So far these two drives have worked harmoniously, allowing me to both generate “outside-the-box” solutions at work and learn audio production software faster.<br /><br /> 
-
-Lets see where the future leads!</p>
-            </div>
-        </div>
-
-        <div class="download-section">
-            <div class="container">
-                <div class="col-lg-8 col-lg-offset-2">
-                    <h2>Contact Me</h2>
-                    <p></p>
-                    <a href="mailto:recurrsions@gmail.com" class="btn btn-default btn-lg">Message Me</a>
-                </div>
-            </div>
-        </div>
-		
-        <div id="#cr" class="container text-center">
-            <p>Copyright &copy; r3cursion.com 2016</p>
-        </div>
-    </section> 
-    
-    <div class="#footer-social-icons">
-        <ul class="social-icons">
-            <li><a href="https://soundcloud.com/r3currsion" class="social-icon"> <i class="fa fa-soundcloud fa-2x"></i></a></li>
-            <li><a href="https://play.spotify.com/search/r3currsion" class="social-icon"> <i class="fa fa-spotify fa-2x"></i></a></li>
-            <li><a href="https://www.facebook.com/r3currsion" class="social-icon"> <i class="fa fa-facebook fa-2x"></i></a></li>
-            <li><a href="https://twitter.com/r3currsion" class="social-icon"> <i class="fa fa-twitter fa-2x"></i></a></li>
-            <li><a href="https://www.instagram.com/r3currsion/" class="social-icon"> <i class="fa fa-instagram fa-2x"></i></a></li>
-        </ul>
     </div>
+</section>
 
-    <div id="footer-player">
-        <div id="player">
-            <i class="fa fa-play play-button" id="player-play"></i>
-            <canvas id="player-visual"></canvas>
-            <div id="volume">
-                <div id="vol_control"></div>
-            </div>
+<!-- Music Section -->
+<section id="music-section" class="container content-section text-center">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+        	<div>
+            	<p style="float: left;"><img src="./img/R3currsion.init().jpg" height="200px" width="200px" border="1px"></p>
+				<p>Text Text</p>
+			</div>
+        	<!--h1 style="color: Green;margin-left: 30px;text-align: left">Album: Init();.</h1-->
+            <table class="table table-inverse">
+                <thead>
+                    <!-- need a title / icon, where the icon is the album art -->
+                    <tr>
+                        <th>#</th>
+                        <th>Song Name</th>
+                        <th>Duration</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- need to add a play button for preview of download -->
+                    <tr>
+                        <th scope="row">1</th>
+                        <td align="left">Firestorm</td>
+                        <td align="left">5:05</td>
+                        <td align="left"><a href="aud/FireStorm.mp3" download> <i class="fa fa-download fa-2x"></i> </a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td align="left">Frequency Spec. Pt.I</td>
+                        <td align="left">2:48</td>
+                        <td align="left"><a href="aud/Frequency Spec.Pt.I.mp3" download> <i class="fa fa-download fa-2x"></i> </a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td align="left">Frequency Spec. Pt.II</td>
+                        <td align="left">2:48</td>
+                        <td align="left"><a href="aud/Frequency Spec.Pt.II.mp3" download> <i class="fa fa-download fa-2x"></i> </a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td align="left">Re-Routin</td>
+                        <td align="left">2:48</td>
+                        <td align="left"><a href="aud/Routin.mp3" download> <i class="fa fa-download fa-2x"></i> </a></td>
+                    </tr>
+					<tr>
+                        <th scope="row">5</th>
+                        <td align="left" >Mpath</td>
+                        <td align="left" width="">4:01</td>
+                        <td align="left"><a href="aud/Mpath.mp3" download> <i class="fa fa-download fa-2x"></i> </a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">6</th>
+                        <td align="left">Artificial Intelligence</td>
+                        <td align="left">4:24</td>
+                        <td align="left"><a href="aud/Artificial Intelligence.mp3" download> <i class="fa fa-download fa-2x"></i> </a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">7</th>
+                        <td align="left">Critical Mass</td>
+                        <td align="left">5:03</td>
+                        <td align="left"><a href="aud/Critical Mass.mp3" download> <i class="fa fa-download fa-2x"></i> </a></td>
+                    </tr>                         
+                </tbody>
+            </table>
+            <h2></h2>
         </div>
     </div>
+</section>
 
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
+<!-- Contact Section -->
+<section id="contact-section" class="container content-section text-center">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+            <h2>About Me</h2>
+            <p>Hello Friend, I am a 26 year-old unsigned producer. I currently work full-time as a software engineer, and produce in my free time with the aspiration to create stage worthy music and beyond.<br />
+                <br />
+                Growing up I always loved computers and had wanted to build them. Somewhere down the road (around age 14 or 15), I was gifted Fruity Loops and begun casually writing music and software for fun. I loved both hobbies, and ended up pursuing a degree in Computer engineering and Computer Science at the University of Massachusetts Amherst.<br />
+                <br />
+                While there I took graduate level computer science, machine learning, signal processing, and other related courses. One constant throughout all the mayhem of engineering were my close friends, and at the time, one such friend was producing music for a record label. This inspired me to continue with music production as a hobby, to start learning new tools, and to improve both myself and my production techniques.<br />
+                <br />
+                Occasionally I would visit his music studio and we would have collaborative “studio sessions” where we would try to produce together. These almost always ended in failure to complete a production but were an opportunity to learn numerous skill sets, including, but not limited to, the ability to D.J., construct legible productions, advanced sound design techniques, and much more.<br />
+                <br />
+                At one point during university I was enrolled in an Artificial Intelligence course, where I encountered a music video of a 3D hologram of 2-Pac on YouTube. It dawned on me that one day I could maybe automate a piece of software to play music on a stage like in that video. Delving further into this concept, I thought about creating AI to write music. I ended up calling this idea/application “r3currsion”.<br />
+                <br />
+                After graduating, I started working full-time as a developer, and simultaneously burgeoned my passion for music. I know that I will never be able to give up writing software; I crave the logical problem solving intrinsic to the field. At the same time, I will never be able to relinquish my creativity and urge to produce unique works of art in my digital studio. So far these two drives have worked harmoniously, allowing me to both generate “outside-the-box” solutions at work and learn audio production software faster.<br />
+                <br />
+                Lets see where the future leads!</p>
+        </div>
+    </div>
+    <div class="download-section">
+        <div class="container">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>Contact Me</h2>
+                <p></p>
+                <a href="mailto:recurrsions@gmail.com" class="btn btn-default btn-lg">Message Me</a> </div>
+        </div>
+    </div>
+    <div id="#cr" class="container text-center">
+        <p>Copyright &copy; r3cursion.com 2016</p>
+    </div>
+</section>
+<div class="#footer-social-icons">
+    <ul class="social-icons">
+        <li><a href="https://soundcloud.com/r3currsion" class="social-icon"> <i class="fa fa-soundcloud fa-2x"></i></a></li>
+        <li><a href="https://play.spotify.com/search/r3currsion" class="social-icon"> <i class="fa fa-spotify fa-2x"></i></a></li>
+        <li><a href="https://www.facebook.com/r3currsion" class="social-icon"> <i class="fa fa-facebook fa-2x"></i></a></li>
+        <li><a href="https://twitter.com/r3currsion" class="social-icon"> <i class="fa fa-twitter fa-2x"></i></a></li>
+        <li><a href="https://www.instagram.com/r3currsion/" class="social-icon"> <i class="fa fa-instagram fa-2x"></i></a></li>
+    </ul>
+</div>
+<div id="footer-player">
+    <div id="player"> <i class="fa fa-play play-button" id="player-play"></i>
+        <canvas id="player-visual"></canvas>
+        <div id="volume">
+            <div id="vol_control"></div>
+        </div>
+    </div>
+</div>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+<!-- jQuery --> 
+<script src="js/jquery.js"></script> 
 
-    <!-- Plugin JavaScript -->
-    <script src="js/jquery.easing.min.js"></script>
+<!-- Bootstrap Core JavaScript --> 
+<script src="js/bootstrap.min.js"></script> 
 
-    <!-- Custom Theme JavaScript -->
-    <script src="js/grayscale.js"></script>
+<!-- Plugin JavaScript --> 
+<script src="js/jquery.easing.min.js"></script> 
 
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-
-    <script src="https://rawgit.com/jeromeetienne/webaudiox/master/build/webaudiox.js"></script>
-    <script src="https://rawgit.com/mattboldt/typed.js/v1.1.1/dist/typed.min.js"></script>
-
+<!-- Custom Theme JavaScript --> 
+<script src="js/grayscale.js"></script> 
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script> 
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script> 
+<script src="https://rawgit.com/jeromeetienne/webaudiox/master/build/webaudiox.js"></script> 
+<script src="https://rawgit.com/mattboldt/typed.js/v1.1.1/dist/typed.min.js"></script>
 </body>
-
 </html>
