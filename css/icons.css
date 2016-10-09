@@ -15,6 +15,7 @@ ul {
 
 ul.social-icons {	
 	margin-top: 10px;
+
 }
 
 .social-icons li {
@@ -91,14 +92,3 @@ ul.social-icons {
 .fa-instagram:hover {
 	background-color: #BA8763;
 }
-
-.fa-download {
-	padding:10px 11px 7px 22px;
-	-o-transition:.5s;
-  	-ms-transition:.5s;
-  	-moz-transition:.5s;
-  	-webkit-transition:.5s;
-  	transition: .5s;
-}
-
-
