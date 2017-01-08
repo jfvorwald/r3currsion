@@ -4,9 +4,7 @@ ul {
 }
 
 .footer-social-icons {
-	width: 350px;
-	position: absolute;
-  	bottom: 0px;
+	height: 6%;
 }
 
 .social-icon {
