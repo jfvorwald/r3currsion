@@ -25,15 +25,6 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 
-<!-- CSS containers -->
-#footer-social-icons {
-	position: relative;	
-}
-
-#cr {
-	position: relative;
-}
-
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 
 <!-- Navigation -->
@@ -59,11 +50,21 @@
 
 <!-- Intro Header -->
 <section id="intro-section" class="intro active-section">
+    <div class="vod-container">
+        <div id="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div id="vod_player"></div>
+            </div>
+        </div>
+    </div>
     <div class="intro-body">
         <div class="container">
             <div class="row">
                 <div class="col-md-8 col-md-offset-2"> <i class="fa fa-play-circle-o play-button" id="front_play"></i>
-                    <div id="init"> <span class="brand-heading" id="cover-title"></span> </div>
+                    <div id="init">
+                        <span class="brand-heading" id="cover-title"></span>
+                    </div>
                 </div>
             </div>
         </div>

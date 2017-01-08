@@ -1,8 +1,8 @@
 // Pageload
 $(function() {
-    $('.play-button').on('click', function(event) {
+/*    $('.play-button').on('click', function(event) {
         processAudio($(this));
-    });
+    });*/
 
     $('.nav-item').on('click', function(event) {
         clicked_nav_id = $(this).attr('id');
@@ -162,3 +162,43 @@ function findTrack(audio) {
       }
     );
 };
+
+/*
+Youtube Processing
+*/
+var player_div = "vod_player";
+
+// 2. This code loads the IFrame Player API code asynchronously.
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+// 3. This function creates an <iframe> (and YouTube player)
+//    after the API code downloads.
+var player;
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player(player_div, {
+        height: '563',
+        width: '1000',
+        playerVars: {
+            list: "PL010gm7ebW-eJVhyZCcMQZ0D3uz1zegj9",
+            listType: "playlist",
+            fs: 0,
+            enablejsapi: 1,
+            iv_load_policy: 3,
+            modestbranding: 1,
+            //origin: "http://r3currsion.com",
+            rel: 0,
+            showinfo: 0,
+            theme: "dark",
+        }
+    });
+
+    $('.play-button').on('click', function(event) {
+        $('.intro-body').fadeOut('400', function () {
+            $('.vod-container').fadeIn();
+        });
+        player.playVideo();
+    });
+}
