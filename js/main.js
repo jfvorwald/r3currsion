@@ -1,9 +1,14 @@
-// Pageload
+// Initial Pageload
 $(function() {
+    // Loads HTML partial files into div elements.
+    w3IncludeHTML();
+
+    // Activate this to enable the music player.
 /*    $('.play-button').on('click', function(event) {
         processAudio($(this));
     });*/
 
+    // Navigation bar for activating pages.
     $('.nav-item').on('click', function(event) {
         clicked_nav_id = $(this).attr('id');
         if (clicked_nav_id + '-section' !== $('.active-section').first().attr('id')) {
@@ -13,14 +18,19 @@ $(function() {
         }
     });
 
-  $("#cover-title").typed({
-    strings: ["Init ();"],
-    typeSpeed: 200,
-    cursorChar: "█",
-    startDelay: 150,
-  });
+    // For the "Init()" blinking text.
+    $("#cover-title").typed({
+        strings: ["Init ();"],
+        typeSpeed: 200,
+        cursorChar: "█",
+        startDelay: 150,
+        callback: function() {
+            // Can do callback function here after done typing.
+        },
+    });
 
-  $("#vol_control").slider({
+    // A volume controller for the legacy music player.
+    $("#vol_control").slider({
       value: 70,
       orientation: "vertical",
       range: "min",
@@ -30,6 +40,16 @@ $(function() {
     });
 });
 
+// Closes the Responsive Menu on Menu Item Click
+$('.navbar-collapse ul li a').click(function() {
+  if ($(this).attr('class') != 'dropdown-toggle active' && $(this).attr('class') != 'dropdown-toggle') {
+    $('.navbar-toggle:visible').click();
+  }
+});
+
+/*
+    Functions
+*/
 
 // jQuery to collapse the navbar on scroll
 function collapseNavbar() {
@@ -40,25 +60,19 @@ function collapseNavbar() {
     }
 }
 
-// Closes the Responsive Menu on Menu Item Click
-$('.navbar-collapse ul li a').click(function() {
-  if ($(this).attr('class') != 'dropdown-toggle active' && $(this).attr('class') != 'dropdown-toggle') {
-    $('.navbar-toggle:visible').click();
-  }
-});
-
+// Call this function for enabling the music spectrum for the music player.
 function processAudio(element) {
     if (typeof audio !== 'undefined') {
         if (audio.paused) {
             audio.play();
-            $('#front_play').removeClass('fa-play-circle-o');
-            $('#front_play').addClass('fa-pause-circle-o');
+            $('#front-play').removeClass('fa-play-circle-o');
+            $('#front-play').addClass('fa-pause-circle-o');
             $('#player-play').removeClass('fa-play');
             $('#player-play').addClass('fa-pause');
         } else {
             audio.pause();
-            $('#front_play').removeClass('fa-pause-circle-o');
-            $('#front_play').addClass('fa-play-circle-o');
+            $('#front-play').removeClass('fa-pause-circle-o');
+            $('#front-play').addClass('fa-play-circle-o');
             $('#player-play').removeClass('fa-pause');
             $('#player-play').addClass('fa-play');
         }
@@ -67,8 +81,8 @@ function processAudio(element) {
         audio.crossOrigin = "anonymous";
         findTrack(audio);
         audio.play();
-        $('#front_play').removeClass('fa-play-circle-o');
-        $('#front_play').addClass('fa-pause-circle-o');
+        $('#front-play').removeClass('fa-play-circle-o');
+        $('#front-play').addClass('fa-pause-circle-o');
         $('#player-play').removeClass('fa-play');
         $('#player-play').addClass('fa-pause');
         $('#footer-player').fadeIn();
@@ -77,7 +91,7 @@ function processAudio(element) {
 
         var source = context.createMediaElementSource(audio);
 
-            // get the context from the canvas to draw on
+        // get the context from the canvas to draw on
         var ctx = $("#player-visual").get()[0].getContext("2d");
 
         // create a gradient for the fill. Note the strange
@@ -129,6 +143,7 @@ function processAudio(element) {
     }
 }
 
+// Simple function to update the volume based on a slider.
 function updateVolume() {
     if (typeof audio !== 'undefined') {
         var volume_val = $("#vol_control").slider("value");
@@ -136,7 +151,7 @@ function updateVolume() {
     }
 }
 
-// Soundcloud API
+// Performs a simple HTTP GET request.
 function get(url, callback) {
     var request = new XMLHttpRequest();
     request.onreadystatechange = function() { 
@@ -149,12 +164,11 @@ function get(url, callback) {
     request.send(null);
 }
 
-var clientParameter = "client_id=9374b0b7414d05b19e7a2b5e1bf74428"
-
-var trackPermalinkUrl = 
-  "https://soundcloud.com/r3currsion/firestorm-1";
-
+// Finds a track on the Soundcloud API.
 function findTrack(audio) {
+    var trackPermalinkUrl = "https://soundcloud.com/r3currsion/firestorm-1";
+    var clientParameter = "client_id=9374b0b7414d05b19e7a2b5e1bf74428"
+
     get("http://api.soundcloud.com/resolve.json?url=" + trackPermalinkUrl + "&" + clientParameter,
       function (response) {
         var trackInfo = JSON.parse(response);
@@ -164,41 +178,50 @@ function findTrack(audio) {
 };
 
 /*
-Youtube Processing
+    Youtube Processing
 */
 var player_div = "vod_player";
 
-// 2. This code loads the IFrame Player API code asynchronously.
+// This code loads the IFrame Player API code asynchronously.
 var tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-// 3. This function creates an <iframe> (and YouTube player)
-//    after the API code downloads.
+// This function creates an <iframe> (and YouTube player)
+// after the API code downloads.
 var player;
 function onYouTubeIframeAPIReady() {
     player = new YT.Player(player_div, {
         height: '563',
         width: '1000',
         playerVars: {
-            list: "PL010gm7ebW-eJVhyZCcMQZ0D3uz1zegj9",
+            list: "PLzpFI_Zzc7WTys6GD0j-K444iezRfwNWX", // The playlist identifier
             listType: "playlist",
             fs: 0,
             enablejsapi: 1,
             iv_load_policy: 3,
             modestbranding: 1,
-            //origin: "http://r3currsion.com",
+            //origin: "http://r3currsion.com", // The origin website of the JS. Disable this for local development.
             rel: 0,
             showinfo: 0,
             theme: "dark",
         }
     });
 
+    // This sets up a listener on the play button to activate the YouTube player.
     $('.play-button').on('click', function(event) {
         $('.intro-body').fadeOut('400', function () {
             $('.vod-container').fadeIn();
         });
         player.playVideo();
+    });
+
+    // If someone clicks outside of the player modal, pause the video and go back to intro.
+    $('#overlay').on('click', function(event) {
+        $('.vod-container').fadeOut('400', function () {
+            $('.intro-body').show();
+        });
+        player.pauseVideo();
     });
 }
