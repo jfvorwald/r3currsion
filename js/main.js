@@ -3,11 +3,6 @@ $(function() {
     // Loads HTML partial files into div elements.
     w3IncludeHTML();
 
-    // Activate this to enable the music player.
-/*    $('.play-button').on('click', function(event) {
-        processAudio($(this));
-    });*/
-
     // Navigation bar for activating pages.
     $('.nav-item').on('click', function(event) {
         clicked_nav_id = $(this).attr('id');
@@ -38,7 +33,15 @@ $(function() {
       slide: updateVolume,
       change: updateVolume
     });
+
+    var everythingLoaded = setInterval(function() {
+      if (/loaded|complete/.test(document.readyState)) {
+        clearInterval(everythingLoaded);
+        loadPartials(); // this is the function that gets called when everything is loaded
+      }
+    }, 10);
 });
+
 
 // Closes the Responsive Menu on Menu Item Click
 $('.navbar-collapse ul li a').click(function() {
@@ -50,6 +53,13 @@ $('.navbar-collapse ul li a').click(function() {
 /*
     Functions
 */
+
+function loadPartials() {
+    $('.album-cover, #player-play').on('click', function(event) {
+        processAudio($(this));
+    });
+    console.log('derp!');
+}
 
 // jQuery to collapse the navbar on scroll
 function collapseNavbar() {
@@ -65,14 +75,10 @@ function processAudio(element) {
     if (typeof audio !== 'undefined') {
         if (audio.paused) {
             audio.play();
-            $('#front-play').removeClass('fa-play-circle-o');
-            $('#front-play').addClass('fa-pause-circle-o');
             $('#player-play').removeClass('fa-play');
             $('#player-play').addClass('fa-pause');
         } else {
             audio.pause();
-            $('#front-play').removeClass('fa-pause-circle-o');
-            $('#front-play').addClass('fa-play-circle-o');
             $('#player-play').removeClass('fa-pause');
             $('#player-play').addClass('fa-play');
         }
@@ -81,8 +87,6 @@ function processAudio(element) {
         audio.crossOrigin = "anonymous";
         findTrack(audio);
         audio.play();
-        $('#front-play').removeClass('fa-play-circle-o');
-        $('#front-play').addClass('fa-pause-circle-o');
         $('#player-play').removeClass('fa-play');
         $('#player-play').addClass('fa-pause');
         $('#footer-player').fadeIn();
@@ -137,7 +141,7 @@ function processAudio(element) {
             for ( var i = 0; i < (array.length); i++ ){
                 var value = array[i];
 
-                ctx.fillRect(i*5,325-value,3,325);
+                ctx.fillRect(i*15,325-value,10,325);
             }
         };
     }
