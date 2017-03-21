@@ -34,6 +34,15 @@ $(function() {
       change: updateVolume
     });
 
+    SC.initialize({
+        client_id: '9374b0b7414d05b19e7a2b5e1bf74428'
+    });
+
+    SC.get('/users/5177578/playlists').then(function(sets){
+        console.log('Latest set: ' + sets[0].title);
+        $('.album-cover').append('<img src="' + sets[0].artwork_url + '"></img>').attr('album-id', sets[0].id);
+    });
+
     var everythingLoaded = setInterval(function() {
       if (/loaded|complete/.test(document.readyState)) {
         clearInterval(everythingLoaded);
@@ -58,7 +67,6 @@ function loadPartials() {
     $('.album-cover, #player-play').on('click', function(event) {
         processAudio($(this));
     });
-    console.log('derp!');
 }
 
 // jQuery to collapse the navbar on scroll
@@ -85,7 +93,14 @@ function processAudio(element) {
     } else {
         audio = new Audio();
         audio.crossOrigin = "anonymous";
-        findTrack(audio);
+        var track;
+        console.log(SC.get('/playlists/' + element.attr('album-id') + '/tracks'));
+        SC.get('/playlists/' + element.attr('album-id') + '/tracks').then(function(tracks){
+            track = tracks[0].title;
+            console.log(track);
+        });
+        console.log(track);
+        audio.src = track;
         audio.play();
         $('#player-play').removeClass('fa-play');
         $('#player-play').addClass('fa-pause');
@@ -169,8 +184,9 @@ function get(url, callback) {
 }
 
 // Finds a track on the Soundcloud API.
-function findTrack(audio) {
-    var trackPermalinkUrl = "https://soundcloud.com/r3currsion/firestorm-1";
+function findTrack() {
+
+    /*var trackPermalinkUrl = "https://soundcloud.com/r3currsion/firestorm-1";
     var clientParameter = "client_id=9374b0b7414d05b19e7a2b5e1bf74428"
 
     get("http://api.soundcloud.com/resolve.json?url=" + trackPermalinkUrl + "&" + clientParameter,
@@ -178,8 +194,12 @@ function findTrack(audio) {
         var trackInfo = JSON.parse(response);
         audio.src = trackInfo.stream_url + "?" + clientParameter;
       }
-    );
+    );*/
 };
+
+function findTracks(playlist_id, track_cb) {
+    SC.get('/playlists/' + playlist_id + '/tracks').then(track_cb);
+}
 
 /*
     Youtube Processing
