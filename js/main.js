@@ -38,11 +38,6 @@ $(function() {
         client_id: '9374b0b7414d05b19e7a2b5e1bf74428'
     });
 
-    SC.get('/users/5177578/playlists').then(function(sets){
-        console.log('Latest set: ' + sets[0].title);
-        $('.album-cover').append('<img src="' + sets[0].artwork_url + '"></img>').attr('album-id', sets[0].id);
-    });
-
     var everythingLoaded = setInterval(function() {
       if (/loaded|complete/.test(document.readyState)) {
         clearInterval(everythingLoaded);
@@ -64,8 +59,19 @@ $('.navbar-collapse ul li a').click(function() {
 */
 
 function loadPartials() {
-    $('.album-cover, #player-play').on('click', function(event) {
-        processAudio($(this));
+    // Populate the music page with all albums
+    SC.get('/users/5177578/playlists').then(function(sets){
+        var addAlbum = function(set) {
+            var album_cover_img = set.artwork_url.replace("large", "crop")
+            var album = $('<div class="album"><img class="album-cover" src="' + album_cover_img + '"></img></div>').attr('data-album-id', set.id);
+            $('.albums').append(album);
+
+            $('.album, #player-play').on('click', function(event) {
+                processAudio($(this));
+            });
+        }
+
+        sets.forEach(addAlbum);
     });
 }
 
@@ -91,68 +97,76 @@ function processAudio(element) {
             $('#player-play').addClass('fa-play');
         }
     } else {
-        audio = new Audio();
-        audio.crossOrigin = "anonymous";
-        var track;
-        console.log(SC.get('/playlists/' + element.attr('album-id') + '/tracks'));
-        SC.get('/playlists/' + element.attr('album-id') + '/tracks').then(function(tracks){
-            track = tracks[0].title;
-            console.log(track);
+        SC.get('/playlists/' + element.attr('data-album-id') + '/tracks').then(function(tracks) {
+            element.append('<canvas id="album-visual"></canvas>');
+            var canvas = $('#album-visual');
+            $('.album > .album-cover').css('opacity', '0.2');
+            var first_track = tracks[0];
+
+            audio = new Audio();
+            audio.crossOrigin = "anonymous";
+            audio.src = first_track.stream_url + '?client_id=9374b0b7414d05b19e7a2b5e1bf74428';
+            audio.play();
+
+            $('#player-play').removeClass('fa-play');
+            $('#player-play').addClass('fa-pause');
+            $('#footer-player').fadeIn();
+
+            gradientCreate(audio, canvas);
         });
-        console.log(track);
-        audio.src = track;
-        audio.play();
-        $('#player-play').removeClass('fa-play');
-        $('#player-play').addClass('fa-pause');
-        $('#footer-player').fadeIn();
 
-        var context = new AudioContext();
+        var gradientCreate = function(audio_stream, canvas) {
+            var context = new AudioContext();
+            var source = context.createMediaElementSource(audio_stream);
+            // get the context from the canvas to draw on
+            var ctx = canvas.get()[0].getContext("2d");
 
-        var source = context.createMediaElementSource(audio);
+            // create a gradient for the fill. Note the strange
+            // offset, since the gradient is calculated based on
+            // the canvas, not the specific element we draw
+            var gradient = ctx.createLinearGradient(0,0,0,300);
+            gradient.addColorStop(1,'#ffffff');
+            gradient.addColorStop(0.75,'#ffffff');
+            gradient.addColorStop(0.50,'#ffffff');
+            gradient.addColorStop(0.25,'#488A2D');
+            gradient.addColorStop(0,'#ffffff');
 
-        // get the context from the canvas to draw on
-        var ctx = $("#player-visual").get()[0].getContext("2d");
+            // setup a javascript node
+            javascriptNode = context.createScriptProcessor(2048, 1, 1);
+            // connect to destination, else it isn't called
+            javascriptNode.connect(context.destination);
 
-        // create a gradient for the fill. Note the strange
-        // offset, since the gradient is calculated based on
-        // the canvas, not the specific element we draw
-        var gradient = ctx.createLinearGradient(0,0,0,300);
-        gradient.addColorStop(1,'#ffffff');
-        gradient.addColorStop(0.75,'#ffffff');
-        gradient.addColorStop(0.50,'#ffffff');
-        gradient.addColorStop(0.25,'#488A2D');
-        gradient.addColorStop(0,'#ffffff');
+            // setup a analyzer
+            analyser = context.createAnalyser();
+            analyser.smoothingTimeConstant = 0.3;
+            analyser.fftSize = 512;
+            //analyser.maxDecibels = -40;
 
-        // setup a javascript node
-        javascriptNode = context.createScriptProcessor(2048, 1, 1);
-        // connect to destination, else it isn't called
-        javascriptNode.connect(context.destination);
+            // create a buffer source node
+            source.connect(context.destination);
+            source.connect(analyser);
+            analyser.connect(javascriptNode);
 
+            javascriptNode.onaudioprocess = function () {
+                fillGradient(gradient, analyser, ctx);
+            }
+        }
 
-        // setup a analyzer
-        analyser = context.createAnalyser();
-        analyser.smoothingTimeConstant = 0.3;
-        analyser.fftSize = 512;
-
-        // create a buffer source node
-        source.connect(context.destination);
-        source.connect(analyser);
-        analyser.connect(javascriptNode);
-
-        javascriptNode.onaudioprocess = function() {
+        var fillGradient = function(gradient, analyser, ctx) {
             // get the average for the first channel
-            var array =  new Uint8Array(analyser.frequencyBinCount);
+            var array = new Uint8Array(analyser.frequencyBinCount);
             analyser.getByteFrequencyData(array);
 
             // clear the current state
             ctx.clearRect(0, 0, 1000, 325);
 
             // set the fill style
-            ctx.fillStyle=gradient;
-            drawSpectrum(array);
+            ctx.fillStyle = gradient;
+
+            drawSpectrum(array, ctx);
         }
 
-        function drawSpectrum(array) {
+        var drawSpectrum = function(array, ctx) {
             for ( var i = 0; i < (array.length); i++ ){
                 var value = array[i];
 
