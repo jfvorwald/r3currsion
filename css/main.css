@@ -234,9 +234,6 @@ a:focus {
     font-size: 10vw;
     cursor: pointer;
     margin-top: 25%;
-}
-
-#front-play:hover {
     background: url('../img/space_bg.jpg');
     background-repeat: repeat-y;
     -webkit-background-clip: text;
