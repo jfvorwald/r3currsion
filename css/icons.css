@@ -3,8 +3,21 @@ ul {
 	list-style: none;
 }
 
+@media(max-width:1260px) {
+    .footer-social-icons {
+        position: fixed;
+    }
+}
+
+@media(min-width:1260px) {
+    .footer-social-icons {
+    	position: fixed;
+    }
+}
+
 .footer-social-icons {
 	height: 6%;
+	bottom: 1%;
 }
 
 .social-icon {
