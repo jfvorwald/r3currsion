@@ -3,11 +3,6 @@ $(function() {
     // Loads HTML partial files into div elements.
     w3IncludeHTML();
 
-    // Activate this to enable the music player.
-/*    $('.play-button').on('click', function(event) {
-        processAudio($(this));
-    });*/
-
     // Navigation bar for activating pages.
     $('.nav-item').on('click', function(event) {
         clicked_nav_id = $(this).attr('id');
@@ -38,7 +33,19 @@ $(function() {
       slide: updateVolume,
       change: updateVolume
     });
+
+    SC.initialize({
+        client_id: '9374b0b7414d05b19e7a2b5e1bf74428'
+    });
+
+    var everythingLoaded = setInterval(function() {
+      if (/loaded|complete/.test(document.readyState)) {
+        clearInterval(everythingLoaded);
+        loadPartials(); // this is the function that gets called when everything is loaded
+      }
+    }, 10);
 });
+
 
 // Closes the Responsive Menu on Menu Item Click
 $('.navbar-collapse ul li a').click(function() {
@@ -51,6 +58,31 @@ $('.navbar-collapse ul li a').click(function() {
     Functions
 */
 
+function loadPartials() {
+    // Populate the music page with all albums
+    SC.get('/users/5177578/playlists').then(function(sets){
+        set_count = 0;
+        set_max_row_size = 4;
+        albums = [];
+        var addAlbum = function(set) {
+            set_count++;
+            var album_cover_img = set.artwork_url.replace("large", "crop")
+            var album = $('<div class="album"><img class="album-cover" src="' + album_cover_img + '"></img></div>').attr('data-album-id', set.id);
+            album.on('click', function(event) {
+                processAudio(set, $(this));
+            });
+            albums.push(album);
+        }
+
+        sets.forEach(addAlbum);
+
+        for (i = 0; i <= set_count; i = i + set_max_row_size) {
+            $('<div class="albums" id="albums_' + i + '"></div>').appendTo($('<div class="col-lg-' + (12 - (i * set_max_row_size)) + '">').appendTo($('#album_row')));
+            $('#albums_' + i).append(albums[i]);
+        }
+    });
+}
+
 // jQuery to collapse the navbar on scroll
 function collapseNavbar() {
     if ($(".navbar").offset().top > 50) {
@@ -61,83 +93,168 @@ function collapseNavbar() {
 }
 
 // Call this function for enabling the music spectrum for the music player.
-function processAudio(element) {
+function processAudio(set, album_element) {
     if (typeof audio !== 'undefined') {
         if (audio.paused) {
             audio.play();
-            $('#front-play').removeClass('fa-play-circle-o');
-            $('#front-play').addClass('fa-pause-circle-o');
-            $('#player-play').removeClass('fa-play');
-            $('#player-play').addClass('fa-pause');
+            //$('#player-play').removeClass('fa-play');
+            //$('#player-play').addClass('fa-pause');
         } else {
             audio.pause();
-            $('#front-play').removeClass('fa-pause-circle-o');
-            $('#front-play').addClass('fa-play-circle-o');
-            $('#player-play').removeClass('fa-pause');
-            $('#player-play').addClass('fa-play');
+            //$('#player-play').removeClass('fa-pause');
+            //$('#player-play').addClass('fa-play');
         }
     } else {
-        audio = new Audio();
-        audio.crossOrigin = "anonymous";
-        findTrack(audio);
-        audio.play();
-        $('#front-play').removeClass('fa-play-circle-o');
-        $('#front-play').addClass('fa-pause-circle-o');
-        $('#player-play').removeClass('fa-play');
-        $('#player-play').addClass('fa-pause');
-        $('#footer-player').fadeIn();
+        // Get all of the tracks for the album
+        SC.get('/playlists/' + album_element.attr('data-album-id') + '/tracks').then(function(tracks) {
+            // Resize album
+            var albums_element = album_element.parent();
+            var album_col = albums_element.parent();
+            album_col.hide();
+            album_col.parent().css('overflow', 'hidden');
 
-        var context = new AudioContext();
+/*            $(document).click(function(event) { 
+                if(!$(event.target).closest(album_col.parent().parent()).length) {
+                    if(album_col.parent().parent().is(":visible")) {
+                        album_col.parent().hide();
+                        $('#album-visual').hide();
+                        album_col.show();
+                        if (typeof audio !== 'undefined') {
+                            audio.pause();
+                        }
+                        if (typeof context !== 'undefined') {
+                            context.close();
+                        }
+                    }
+                }        
+            });*/
 
-        var source = context.createMediaElementSource(audio);
+            $('<div class="col-md-1"></div>').appendTo(album_col.parent());
+            var album_spotlight = $('<div id="album-spotlight" class="col-md-3"></div>').appendTo(album_col.parent());
+            var album_cover = album_element.children('img').removeClass('album-cover').addClass('album-cover-full');
+            album_spotlight.append(album_element);
+            album_spotlight.append('<a href="' + set.permalink_url + '"><i class="fa fa-soundcloud fa-2x"></i></a>');
+            album_spotlight.append('<a id="track-download"><i class="fa fa-download fa-2x"></i></a>');
+            // var player_button = $('<i class="fa fa-play" id="player-play"></i>').appendTo(album_spotlight);
+            var track_list = $('<div id="track-list" class="col-md-6"></div>').appendTo(album_col.parent());
 
-        // get the context from the canvas to draw on
-        var ctx = $("#player-visual").get()[0].getContext("2d");
+            var generateTrackList = function(track) {
+                // Build the track element, add to track list. Attach event handlers.
+                var track_elm = $('<div class="track"></div>');
+                track_elm.appendTo(track_list);
+                track_elm.click(function() {setCurrentTrack($(this), track)});
+                var track_title_elm = $('<span></span>').html(track.title).appendTo(track_elm);
+                $('<i class="fa fa-play-circle"></i>').appendTo(track_title_elm);
 
-        // create a gradient for the fill. Note the strange
-        // offset, since the gradient is calculated based on
-        // the canvas, not the specific element we draw
-        var gradient = ctx.createLinearGradient(0,0,0,300);
-        gradient.addColorStop(1,'#ffffff');
-        gradient.addColorStop(0.75,'#ffffff');
-        gradient.addColorStop(0.50,'#ffffff');
-        gradient.addColorStop(0.25,'#488A2D');
-        gradient.addColorStop(0,'#ffffff');
+                // Set the initial track
+                if (tracks[0] == track) {
+                    setCurrentTrack(track_elm, track);
+                }
 
-        // setup a javascript node
-        javascriptNode = context.createScriptProcessor(2048, 1, 1);
-        // connect to destination, else it isn't called
-        javascriptNode.connect(context.destination);
+            }
+            tracks.forEach(generateTrackList)
 
+            //$('#player-play').removeClass('fa-play');
+            //$('#player-play').addClass('fa-pause');
+            //$('#footer-player').fadeIn();
+        });
 
-        // setup a analyzer
-        analyser = context.createAnalyser();
-        analyser.smoothingTimeConstant = 0.3;
-        analyser.fftSize = 512;
+        var setCurrentTrack = function (track_elm, track) {
+            if (track_elm.attr('id') === 'current-track') {
+                if (typeof audio !== 'undefined' && audio.paused) {
+                    track_elm.find('.fa-play-circle').attr('class', 'fa fa-pause-circle');
+                    audio.play();
+                } else {
+                    $('#current-track > span > .fa-pause-circle').attr('class', 'fa fa-play-circle');
+                    audio.pause();
+                }
+            } else {
+                $('#current-track > span > .fa-pause-circle').attr('class', 'fa fa-play-circle');
+                $('#current-track').removeAttr('id');
+                track_elm.attr('id', 'current-track');
+                track_elm.find('.fa-play-circle').attr('class', 'fa fa-pause-circle');
+                $('#track-download').attr('href', track.download_url);
+                playTrack(track);
+            }
+        }
 
-        // create a buffer source node
-        source.connect(context.destination);
-        source.connect(analyser);
-        analyser.connect(javascriptNode);
+        var playTrack = function (track) {
+            if (typeof audio !== 'undefined') {
+                audio.pause();
+            }
 
-        javascriptNode.onaudioprocess = function() {
-            // get the average for the first channel
-            var array =  new Uint8Array(analyser.frequencyBinCount);
+            audio = new Audio();
+            audio.crossOrigin = "anonymous";
+            audio.src = track.stream_url + '?client_id=9374b0b7414d05b19e7a2b5e1bf74428';
+            audio.play();
+
+            gradientCreate(audio, $('#album-visual'));
+        }
+
+        var gradientCreate = function(audio_stream, canvas) {
+            if (typeof context === 'undefined') {
+                context = new AudioContext();
+            } else {
+                context.close();
+                context = new AudioContext();
+            }
+
+            var source = context.createMediaElementSource(audio_stream);
+            // get the context from the canvas to draw on
+            var ctx = canvas.get()[0].getContext("2d");
+
+            // create a gradient for the fill. Note the strange
+            // offset, since the gradient is calculated based on
+            // the canvas, not the specific element we draw
+            var gradient = ctx.createLinearGradient(0,0,0,300);
+            gradient.addColorStop(1,'#ffffff');
+            gradient.addColorStop(0.75,'#ffffff');
+            gradient.addColorStop(0.50,'#ffffff');
+            gradient.addColorStop(0.25,'#7a07b5');
+            gradient.addColorStop(0,'#ffffff');
+
+            // setup a javascript node
+            javascriptNode = context.createScriptProcessor(2048, 1, 1);
+            // connect to destination, else it isn't called
+            javascriptNode.connect(context.destination);
+
+            // setup a analyzer
+            analyser = context.createAnalyser();
+            analyser.smoothingTimeConstant = 0.3;
+            analyser.fftSize = 512;
+            //analyser.maxDecibels = -40;
+
+            // create a buffer source node
+            source.connect(context.destination);
+            source.connect(analyser);
+            analyser.connect(javascriptNode);
+
+            javascriptNode.onaudioprocess = function () {
+                fillGradient(gradient, analyser, ctx);
+            }
+        }
+
+        var fillGradient = function(gradient, analyser, ctx) {
+            // Dynamically set the canvas size based on the current window.
+            ctx.canvas.width  = $('#spec_canvas').width();
+            ctx.canvas.height = window.innerHeight*.2;
+            var array = new Uint8Array(analyser.frequencyBinCount);
             analyser.getByteFrequencyData(array);
 
             // clear the current state
             ctx.clearRect(0, 0, 1000, 325);
 
             // set the fill style
-            ctx.fillStyle=gradient;
-            drawSpectrum(array);
+            ctx.fillStyle = gradient;
+
+            drawSpectrum(array, ctx);
         }
 
-        function drawSpectrum(array) {
+        var drawSpectrum = function(array, ctx) {
             for ( var i = 0; i < (array.length); i++ ){
                 var value = array[i];
 
-                ctx.fillRect(i*5,325-value,3,325);
+                ctx.fillRect(i*15,325-value,10,325);
             }
         };
     }
@@ -165,8 +282,9 @@ function get(url, callback) {
 }
 
 // Finds a track on the Soundcloud API.
-function findTrack(audio) {
-    var trackPermalinkUrl = "https://soundcloud.com/r3currsion/firestorm-1";
+function findTrack() {
+
+    /*var trackPermalinkUrl = "https://soundcloud.com/r3currsion/firestorm-1";
     var clientParameter = "client_id=9374b0b7414d05b19e7a2b5e1bf74428"
 
     get("http://api.soundcloud.com/resolve.json?url=" + trackPermalinkUrl + "&" + clientParameter,
@@ -174,8 +292,12 @@ function findTrack(audio) {
         var trackInfo = JSON.parse(response);
         audio.src = trackInfo.stream_url + "?" + clientParameter;
       }
-    );
+    );*/
 };
+
+function findTracks(playlist_id, track_cb) {
+    SC.get('/playlists/' + playlist_id + '/tracks').then(track_cb);
+}
 
 /*
     Youtube Processing
