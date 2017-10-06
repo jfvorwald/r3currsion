@@ -61,18 +61,25 @@ $('.navbar-collapse ul li a').click(function() {
 function loadPartials() {
     // Populate the music page with all albums
     SC.get('/users/5177578/playlists').then(function(sets){
+        set_count = 0;
+        set_max_row_size = 4;
+        albums = [];
         var addAlbum = function(set) {
+            set_count++;
             var album_cover_img = set.artwork_url.replace("large", "crop")
-            // album object??class
             var album = $('<div class="album"><img class="album-cover" src="' + album_cover_img + '"></img></div>').attr('data-album-id', set.id);
-            $('.albums').append(album);
-
-            $('.album').on('click', function(event) {
-                processAudio($(this));
+            album.on('click', function(event) {
+                processAudio(set, $(this));
             });
+            albums.push(album);
         }
 
         sets.forEach(addAlbum);
+
+        for (i = 0; i <= set_count; i = i + set_max_row_size) {
+            $('<div class="albums" id="albums_' + i + '"></div>').appendTo($('<div class="col-lg-' + (12 - (i * set_max_row_size)) + '">').appendTo($('#album_row')));
+            $('#albums_' + i).append(albums[i]);
+        }
     });
 }
 
@@ -86,16 +93,16 @@ function collapseNavbar() {
 }
 
 // Call this function for enabling the music spectrum for the music player.
-function processAudio(album_element) {
+function processAudio(set, album_element) {
     if (typeof audio !== 'undefined') {
         if (audio.paused) {
             audio.play();
-            $('#player-play').removeClass('fa-play');
-            $('#player-play').addClass('fa-pause');
+            //$('#player-play').removeClass('fa-play');
+            //$('#player-play').addClass('fa-pause');
         } else {
             audio.pause();
-            $('#player-play').removeClass('fa-pause');
-            $('#player-play').addClass('fa-play');
+            //$('#player-play').removeClass('fa-pause');
+            //$('#player-play').addClass('fa-play');
         }
     } else {
         // Get all of the tracks for the album
@@ -104,33 +111,94 @@ function processAudio(album_element) {
             var albums_element = album_element.parent();
             var album_col = albums_element.parent();
             album_col.hide();
-            var album_spotlight = $('<div id="album_spotlight" class="col-md-4"></div>').appendTo(album_col.parent());
+            album_col.parent().css('overflow', 'hidden');
+
+/*            $(document).click(function(event) { 
+                if(!$(event.target).closest(album_col.parent().parent()).length) {
+                    if(album_col.parent().parent().is(":visible")) {
+                        album_col.parent().hide();
+                        $('#album-visual').hide();
+                        album_col.show();
+                        if (typeof audio !== 'undefined') {
+                            audio.pause();
+                        }
+                        if (typeof context !== 'undefined') {
+                            context.close();
+                        }
+                    }
+                }        
+            });*/
+
+            $('<div class="col-md-1"></div>').appendTo(album_col.parent());
+            var album_spotlight = $('<div id="album-spotlight" class="col-md-3"></div>').appendTo(album_col.parent());
             var album_cover = album_element.children('img').removeClass('album-cover').addClass('album-cover-full');
             album_spotlight.append(album_element);
-            var player_button = $('<i class="fa fa-play" id="player-play"></i>').appendTo(album_spotlight);
-            var track_list = $('<div id="track_list" class="col-md-8"></div>').appendTo(album_col.parent());
+            album_spotlight.append('<a href="' + set.permalink_url + '"><i class="fa fa-soundcloud fa-2x"></i></a>');
+            album_spotlight.append('<a id="track-download"><i class="fa fa-download fa-2x"></i></a>');
+            // var player_button = $('<i class="fa fa-play" id="player-play"></i>').appendTo(album_spotlight);
+            var track_list = $('<div id="track-list" class="col-md-6"></div>').appendTo(album_col.parent());
 
-            var first_track = tracks[0];
             var generateTrackList = function(track) {
-                console.log(track.title);
-                $('<span class="row"></span>').html(track.title).appendTo(track_list);
+                // Build the track element, add to track list. Attach event handlers.
+                var track_elm = $('<div class="track"></div>');
+                track_elm.appendTo(track_list);
+                track_elm.click(function() {setCurrentTrack($(this), track)});
+                var track_title_elm = $('<span></span>').html(track.title).appendTo(track_elm);
+                $('<i class="fa fa-play-circle"></i>').appendTo(track_title_elm);
+
+                // Set the initial track
+                if (tracks[0] == track) {
+                    setCurrentTrack(track_elm, track);
+                }
+
             }
             tracks.forEach(generateTrackList)
-
-            audio = new Audio();
-            audio.crossOrigin = "anonymous";
-            audio.src = first_track.stream_url + '?client_id=9374b0b7414d05b19e7a2b5e1bf74428';
-            audio.play();
 
             //$('#player-play').removeClass('fa-play');
             //$('#player-play').addClass('fa-pause');
             //$('#footer-player').fadeIn();
-
-            gradientCreate(audio, $('#album-visual'));
         });
 
+        var setCurrentTrack = function (track_elm, track) {
+            if (track_elm.attr('id') === 'current-track') {
+                if (typeof audio !== 'undefined' && audio.paused) {
+                    track_elm.find('.fa-play-circle').attr('class', 'fa fa-pause-circle');
+                    audio.play();
+                } else {
+                    $('#current-track > span > .fa-pause-circle').attr('class', 'fa fa-play-circle');
+                    audio.pause();
+                }
+            } else {
+                $('#current-track > span > .fa-pause-circle').attr('class', 'fa fa-play-circle');
+                $('#current-track').removeAttr('id');
+                track_elm.attr('id', 'current-track');
+                track_elm.find('.fa-play-circle').attr('class', 'fa fa-pause-circle');
+                $('#track-download').attr('href', track.download_url);
+                playTrack(track);
+            }
+        }
+
+        var playTrack = function (track) {
+            if (typeof audio !== 'undefined') {
+                audio.pause();
+            }
+
+            audio = new Audio();
+            audio.crossOrigin = "anonymous";
+            audio.src = track.stream_url + '?client_id=9374b0b7414d05b19e7a2b5e1bf74428';
+            audio.play();
+
+            gradientCreate(audio, $('#album-visual'));
+        }
+
         var gradientCreate = function(audio_stream, canvas) {
-            var context = new AudioContext();
+            if (typeof context === 'undefined') {
+                context = new AudioContext();
+            } else {
+                context.close();
+                context = new AudioContext();
+            }
+
             var source = context.createMediaElementSource(audio_stream);
             // get the context from the canvas to draw on
             var ctx = canvas.get()[0].getContext("2d");
@@ -167,7 +235,9 @@ function processAudio(album_element) {
         }
 
         var fillGradient = function(gradient, analyser, ctx) {
-            // get the average for the first channel
+            // Dynamically set the canvas size based on the current window.
+            ctx.canvas.width  = $('#spec_canvas').width();
+            ctx.canvas.height = window.innerHeight*.2;
             var array = new Uint8Array(analyser.frequencyBinCount);
             analyser.getByteFrequencyData(array);
 
