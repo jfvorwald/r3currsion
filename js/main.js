@@ -97,12 +97,8 @@ function processAudio(set, album_element) {
     if (typeof audio !== 'undefined') {
         if (audio.paused) {
             audio.play();
-            //$('#player-play').removeClass('fa-play');
-            //$('#player-play').addClass('fa-pause');
         } else {
             audio.pause();
-            //$('#player-play').removeClass('fa-pause');
-            //$('#player-play').addClass('fa-play');
         }
     } else {
         // Get all of the tracks for the album
@@ -112,23 +108,6 @@ function processAudio(set, album_element) {
             var album_col = albums_element.parent();
             album_col.hide();
             album_col.parent().css('overflow', 'hidden');
-
-/*            $(document).click(function(event) { 
-                if(!$(event.target).closest(album_col.parent().parent()).length) {
-                    if(album_col.parent().parent().is(":visible")) {
-                        album_col.parent().hide();
-                        $('#album-visual').hide();
-                        album_col.show();
-                        if (typeof audio !== 'undefined') {
-                            audio.pause();
-                        }
-                        if (typeof context !== 'undefined') {
-                            context.close();
-                        }
-                    }
-                }        
-            });*/
-
             $('<div class="col-md-1"></div>').appendTo(album_col.parent());
             var album_spotlight = $('<div id="album-spotlight" class="col-md-3"></div>').appendTo(album_col.parent());
             var album_cover = album_element.children('img').removeClass('album-cover').addClass('album-cover-full');
@@ -152,11 +131,7 @@ function processAudio(set, album_element) {
                 }
 
             }
-            tracks.forEach(generateTrackList)
-
-            //$('#player-play').removeClass('fa-play');
-            //$('#player-play').addClass('fa-pause');
-            //$('#footer-player').fadeIn();
+            tracks.forEach(generateTrackList)\
         });
 
         var setCurrentTrack = function (track_elm, track) {
