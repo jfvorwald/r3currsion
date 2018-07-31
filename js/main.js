@@ -12,17 +12,7 @@ $(function() {
             }).removeClass('active-section');
         }
     });
-
-    // For the "Init()" blinking text.
-    // $("#cover-title").typed({
-    //     strings: ["Init ();"],
-    //     typeSpeed: 200,
-    //     cursorChar: "█",
-    //     startDelay: 150,
-    //     callback: function() {
-    //         // Can do callback function here after done typing.
-    //     },
-    // });
+    // test
 
     // A volume controller for the legacy music player.
     $("#vol_control").slider({
