@@ -47,7 +47,6 @@ $('.navbar-collapse ul li a').click(function() {
 /*
     Functions
 */
-
 function loadPartials() {
     // Populate the music page with all albums
     SC.get('/users/5177578/playlists').then(function(sets){
@@ -245,20 +244,6 @@ function get(url, callback) {
     request.open("GET", url, true);            
     request.send(null);
 }
-
-// Finds a track on the Soundcloud API.
-function findTrack() {
-
-    /*var trackPermalinkUrl = "https://soundcloud.com/r3currsion/firestorm-1";
-    var clientParameter = "client_id=9374b0b7414d05b19e7a2b5e1bf74428"
-
-    get("http://api.soundcloud.com/resolve.json?url=" + trackPermalinkUrl + "&" + clientParameter,
-      function (response) {
-        var trackInfo = JSON.parse(response);
-        audio.src = trackInfo.stream_url + "?" + clientParameter;
-      }
-    );*/
-};
 
 function findTracks(playlist_id, track_cb) {
     SC.get('/playlists/' + playlist_id + '/tracks').then(track_cb);
